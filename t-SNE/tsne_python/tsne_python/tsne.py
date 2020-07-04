@@ -40,7 +40,7 @@ def x2p(X=np.array([]), tol=1e-5, perplexity=30.0):
     print("Computing pairwise distances...")
     (n, d) = X.shape
     sum_X = np.sum(np.square(X), 1)
-    D = np.add(np.add(-2 * np.dot(X, X.T), sum_X).T, sum_X) #distance ||xi-xj||^2
+    D = np.add(np.add(-2 * np.dot(X, X.T), sum_X).T, sum_X)
     P = np.zeros((n, n))
     beta = np.ones((n, 1))
     logU = np.log(perplexity)
@@ -64,7 +64,7 @@ def x2p(X=np.array([]), tol=1e-5, perplexity=30.0):
         while np.abs(Hdiff) > tol and tries < 50:
 
             # If not, increase or decrease precision
-            if Hdiff > 0: # if H > logU
+            if Hdiff > 0:
                 betamin = beta[i].copy()
                 if betamax == np.inf or betamax == -np.inf:
                     beta[i] = beta[i] * 2.
@@ -143,17 +143,17 @@ def tsne(X=np.array([]), no_dims=2, initial_dims=50, perplexity=30.0):
     for iter in range(max_iter):
 
         # Compute pairwise affinities
-        sum_Y = np.sum(np.square(Y), 1) # Y = (2500,2) sum_y = (2500,)
-        num = -2. * np.dot(Y, Y.T) #num = (2500, 2500)
+        sum_Y = np.sum(np.square(Y), 1)
+        num = -2. * np.dot(Y, Y.T)
         num = 1. / (1. + np.add(np.add(num, sum_Y).T, sum_Y))
-        num[range(n), range(n)] = 0.  #num = molecular of qij
+        num[range(n), range(n)] = 0.
         Q = num / np.sum(num)
-        Q = np.maximum(Q, 1e-12) # Q = qij = (2500, 2500)
+        Q = np.maximum(Q, 1e-12)
 
         # Compute gradient
         PQ = P - Q
-        for i in range(n): #dY = (2500, 2) of zeros
-            dY[i, :] = np.sum(np.tile(PQ[:, i] * num[:, i], (no_dims, 1)).T * (Y[i, :] - Y), 0) # (2500 ,2) * (2500, 2)
+        for i in range(n):
+            dY[i, :] = np.sum(np.tile(PQ[:, i] * num[:, i], (no_dims, 1)).T * (Y[i, :] - Y), 0)
 
         # Perform the update
         if iter < 20:
