@@ -39,7 +39,7 @@ def x2p(X=np.array([]), tol=1e-5, perplexity=30.0):
     # Initialize some variables
     print("Computing pairwise distances...")
     (n, d) = X.shape
-    sum_X = np.sum(np.square(X), 1)
+    sum_X = np.sum(np.square(X), 1) #x = ()
     D = np.add(np.add(-2 * np.dot(X, X.T), sum_X).T, sum_X)
     P = np.zeros((n, n))
     beta = np.ones((n, 1))
@@ -97,8 +97,8 @@ def pca(X=np.array([]), no_dims=50):
     """
 
     print("Preprocessing the data using PCA...")
-    (n, d) = X.shape
-    X = X - np.tile(np.mean(X, 0), (n, 1))
+    (n, d) = X.shape (10000,2500)
+    X = X - np.tile(np.mean(X, 0), (n, 1)) #np.mean to (1,2500)
     (l, M) = np.linalg.eig(np.dot(X.T, X))
     Y = np.dot(X, M[:, 0:no_dims])
     return Y
